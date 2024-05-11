@@ -1,5 +1,7 @@
 package sdis.spotify.server;
 
+import sdis.spotify.common.Spotify;
+
 public class Lanzador {
     public static void main(String [] args){
         try{
