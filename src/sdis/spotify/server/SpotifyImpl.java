@@ -1,11 +1,13 @@
 package sdis.spotify.server;
 
 import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import sdis.spotify.common.Spotify;
 import sdis.spotify.common.Strings;
+import sdis.spotify.media.Globals;
 import sdis.spotify.media.Media;
 import sdis.spotify.utils.MultiMap;
 
@@ -32,7 +34,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * @throws RemoteException
      */
     public String hello() throws RemoteException{
-        return Strings.MENSAJE_INICIO;
+        return Globals.hello_banner;
     }
 
     /**
@@ -61,6 +63,12 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         String playlist = "DEFAULT";
         contenido.push(playlist, elemento);
         directorio.put(playlist, elemento);
+        try {
+            System.out.println(this.getClientHost()+"-> Canción añadida: "+elemento.getName()+" Playlist: "+playlist);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -72,6 +80,12 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
     public void add2L(String playlist, Media elemento) throws RemoteException {
         contenido.push(playlist, elemento);
         directorio.put(playlist, elemento);
+        try {
+            System.out.println(this.getClientHost()+"-> Canción añadida: "+elemento.getName()+" Playlist: "+playlist);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -81,10 +95,16 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     public Media readL() throws RemoteException {
         String playlist = "DEFAULT";
-
         Media elem = contenido.pop(playlist);
-        return elem;
 
+        try {
+            System.out.println(this.getClientHost()+"-> Canción eliminada: "+elem.getName()+" Playlist: "+playlist);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
+
+        return elem;
     }
 
     /**
@@ -95,6 +115,13 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     public Media readL(String playlist) throws RemoteException {
         Media elem = contenido.pop(playlist);
+
+        try {
+            System.out.println(this.getClientHost()+"-> Canción eliminada: "+elem.getName()+" Playlist: "+playlist);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
         return elem;
     }
 
