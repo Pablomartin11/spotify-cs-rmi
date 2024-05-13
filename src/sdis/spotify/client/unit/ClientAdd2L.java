@@ -20,7 +20,8 @@ public class ClientAdd2L {
             o1.addComment("Esta bien duro manin");
             o1.addScore(7);
             o1.addScore(7.6);
-            //ImageIcon io1 = new ImageIcon("EsclavaRemix.png");
+            //ImageIcon io1 = new ImageIcon("./Cover/EsclavaRemix.jpg");
+
             //o1.setCover(io1);
 
 
@@ -50,9 +51,12 @@ public class ClientAdd2L {
             s.add2L(o2);
             s.add2L(o3);
 
+
+            //o1.showCover();
             System.out.println(o1.toString());
             System.out.println(o2.toString());
             System.out.println(o3.toString());
+
 
 
         }catch(Exception e){

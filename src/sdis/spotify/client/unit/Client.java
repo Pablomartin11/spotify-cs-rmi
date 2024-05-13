@@ -10,55 +10,62 @@ public class Client {
 
 
         try{
+            //Bienvenida
             Spotify s = (Spotify) java.rmi.Naming.lookup("spotify");
-
             String r = s.hello();
+            System.out.println(r);
+            //Registro
+            r = s.auth("alex","PPP");
+            System.out.println(r);
+            r = s.auth("hector","1234");
+            System.out.println(r);
+            //Añadir Canciones y Playlist
+            Media o1 = new Media("Cancion 1");
+            Media o2 = new Media("Cancion 2");
+            Media o3 = new Media("Cancion 3");
+            s.add2L(o1);
+            s.add2L(o2);
+            s.add2L("Playlist1",o1);
+            s.add2L("Playlist1",o2);
+            s.add2L("Playlist1",o3);
+            //Leer cancion destructiva
+            Media c = s.readL();
+            System.out.println("Cancion leida y eliminada: "+c.getName());
+            c = s.readL("Playlist1");
+            System.out.println("Cancion leida y eliminada: "+c.getName());
+            //Leer cancion no destructiva
+            c = s.peekL();
+            System.out.println("Cancion leida: "+c.getName());
+            c = s.peekL("Playlist1");
+            System.out.println("Cancion leida: "+c.getName());
+            //Borrar playlist
+            r = s.deleteL("Playlist1");
+            System.out.println(r);
+            r = s.deleteL("Playlist1");
+            System.out.println(r);
+            //get-directory-list
+            r = s.getDirectoryList();
+            System.out.println(r);
+            //recuperar elemento del directorio
+            c = s.retrieveMedia("Cancion 1");
+            System.out.println("Cancion recuperada: "+c.getName());
+            r = s.getDirectoryList();
+            System.out.println(r);
+            //Cambiar caratula
+            //TODO
 
+            //añadir puntuacion
+            r = s.addScore("Cancion 1",9.8);
+            System.out.println(r);
+            r = s.addScore("Cancion 2",10.01);
             System.out.println(r);
 
-            int salida= 0;
+            //Añadir comentario
+            r = s.addComment("Cancion 1","buena cancion");
+            System.out.println(r);
+            r = s.addComment("Cancion 1","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            System.out.println(r);
 
-            while(salida==0){
-
-                System.out.println("Ingrese una opción:");
-                System.out.println("1. login");
-                System.out.println("2. add-to-list");
-                System.out.println("3. read-from-list");
-                System.out.println("4. Salir");
-                System.out.print("Opción: ");
-
-                String opcion = scanner.nextLine();
-                //int opcion = Integer.parseInt(comando);
-
-                System.out.println();
-
-                switch (opcion) {
-                    case "1":
-                        System.out.println("Ha seleccionado la Opción 1.");
-                        break;
-                    case "2":
-                        System.out.println("Ha seleccionado la opcion add-to-list");
-                        System.out.println("Introduzca el nombre de la canción");
-                        String nom = scanner.nextLine();
-                        Media cancion = new Media(nom);
-                        s.add2L(cancion);
-
-                        break;
-                    case "3":
-                        System.out.println("Ha seleccionado la Opción 3.");
-                        break;
-                    case "4":
-                        System.out.println("Saliendo...");
-                        salida=1;
-                        break;
-                    default:
-
-
-                        System.out.println("Opción inválida.");
-                }
-
-
-            }
 
         }catch(Exception e){
             e.printStackTrace();

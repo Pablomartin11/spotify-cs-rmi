@@ -34,6 +34,11 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * @throws RemoteException
      */
     public String hello() throws RemoteException{
+        try {
+            System.out.println(this.getClientHost()+"-> ping-check-server");
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
         return Globals.hello_banner;
     }
 
@@ -45,13 +50,19 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * 
      */
     public String auth(String username, String password) throws RemoteException {
-                      
+        String res ;
         if (validateCredentials(username,password)){
-            return "AUTH";
+            res= "AUTH";
         }
         else{
-            return "NOTAUTH";    
-        }            
+            res =  "NOTAUTH";
+        }
+        try {
+            System.out.println(this.getClientHost()+"-> login :"+res);
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
     /**
@@ -62,10 +73,9 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
     public void add2L(Media elemento) throws RemoteException {
         String playlist = "DEFAULT";
         contenido.push(playlist, elemento);
-        directorio.put(playlist, elemento);
+        directorio.put(elemento.getName(), elemento);
         try {
-            System.out.println(this.getClientHost()+"-> Canción añadida: "+elemento.getName()+" Playlist: "+playlist);
-
+            System.out.println(this.getClientHost()+"-> Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
         }
@@ -79,9 +89,9 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     public void add2L(String playlist, Media elemento) throws RemoteException {
         contenido.push(playlist, elemento);
-        directorio.put(playlist, elemento);
+        directorio.put(elemento.getName(), elemento);
         try {
-            System.out.println(this.getClientHost()+"-> Canción añadida: "+elemento.getName()+" Playlist: "+playlist);
+            System.out.println(this.getClientHost()+"-> Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -98,7 +108,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         Media elem = contenido.pop(playlist);
 
         try {
-            System.out.println(this.getClientHost()+"-> Canción eliminada: "+elem.getName()+" Playlist: "+playlist);
+            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida y eliminada de Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -117,7 +127,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         Media elem = contenido.pop(playlist);
 
         try {
-            System.out.println(this.getClientHost()+"-> Canción eliminada: "+elem.getName()+" Playlist: "+playlist);
+            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida y eliminada de Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -134,6 +144,14 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         String playlist = "DEFAULT";
 
         Media elem = contenido.peek(playlist);
+
+        try {
+            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida de Playlist: "+playlist);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
+
         return elem;
     }
 
@@ -145,6 +163,12 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     public Media peekL(String playlist) throws RemoteException {
         Media elem = contenido.peek(playlist);
+        try {
+            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida de Playlist: "+playlist);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
         return elem;
     }
 
@@ -155,56 +179,89 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * @throws RemoteException
      */
     public String deleteL(String playlist) throws RemoteException {
+        String res;
         boolean borrado = false;
         //Se comprueba que la clave existe
         if(contenido.containsKey(playlist)){
             borrado = contenido.remove(playlist);
 
-            if(!borrado) return "EMPTY";    // Si no te consigue eliminar
-            else return "DELETED";
+            if(!borrado) res= "EMPTY";    // Si no te consigue eliminar
+            else res= "DELETED";
         }else {
-            return "EMPTY";
+            res= "EMPTY";
         }
+        try {
+            System.out.println(this.getClientHost()+"-> delete-list "+playlist+" : "+res);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
 
     public String getDirectoryList() throws RemoteException {
         Set<String> keys = this.directorio.keySet();
         String keysAsString = String.join(", ", keys);
+        try {
+            System.out.println(this.getClientHost()+"-> get-directory-list");
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
         return keysAsString;
     }
 
 
     public Media retrieveMedia(String elemento) throws RemoteException {
+        try {
+            System.out.println(this.getClientHost()+"-> retrieve-directory-element-media: "+elemento);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
         return this.directorio.get(elemento);
     }
 
-
+    //TODO
     public String setCover(Media objeto) throws RemoteException {
         return null;
     }
 
     public String addScore(String elemento, double score) throws RemoteException{
-        boolean malFlag = comprobarScore(score);
-
-        if (!malFlag){
+        boolean Flag = comprobarScore(score);
+        String res;
+        if (Flag){
             this.directorio.get(elemento).addScore(score);
-            return "SCORE ADDED";
-        } else return "NOT A SCORE";
+            res= "SCORE ADDED";
+        } else res= "NOT A SCORE";
+        try {
+            System.out.println(this.getClientHost()+"-> add-score-to-directory-element-media "+elemento+": "+res);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
     public String addComment(String elemento, String comentario) throws RemoteException{
-        boolean malFlag = comprobarComentario(comentario);
-
-        if (!malFlag){
+        boolean Flag = comprobarComentario(comentario);
+        String res;
+        if (Flag){
             this.directorio.get(elemento).addComment(comentario);
-            return "COMMENT ADDED";
-        } else return "NOT ALLOWED COMMENT";
+            res = "COMMENT ADDED";
+        } else res =  "NOT ALLOWED COMMENT";
+        try {
+            System.out.println(this.getClientHost()+"-> add-comment-to-directory-element-media "+elemento+": "+res);
+
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
     private boolean comprobarComentario(String comentario) {
-        if (comentario.length() > 100) return false;
-        else return true;
+        return comentario.length() <= 100;
     }
 
     private boolean comprobarScore(double score) {
