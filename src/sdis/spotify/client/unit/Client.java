@@ -1,7 +1,7 @@
 package sdis.spotify.client.unit;
 
 import sdis.spotify.common.Spotify;
-import sdis.spotify.media.Media;
+import sdis.spotify.common.Media;
 import java.util.Scanner;
 public class Client {
     public static void main(String [] arg) {

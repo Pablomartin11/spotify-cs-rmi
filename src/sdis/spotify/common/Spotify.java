@@ -3,8 +3,6 @@ package sdis.spotify.common;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import sdis.spotify.media.Media;
-
 public interface Spotify extends Remote{
     String hello() throws RemoteException;
     String auth(String username, String password) throws RemoteException;

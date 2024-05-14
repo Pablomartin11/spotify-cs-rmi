@@ -6,10 +6,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import sdis.spotify.common.Spotify;
-import sdis.spotify.common.Strings;
-import sdis.spotify.media.Globals;
-import sdis.spotify.media.Media;
-import sdis.spotify.utils.MultiMap;
+import sdis.spotify.common.Globals;
+import sdis.spotify.common.Media;
 
 
 public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements Spotify{

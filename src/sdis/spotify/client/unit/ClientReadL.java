@@ -1,9 +1,7 @@
 package sdis.spotify.client.unit;
 
 import sdis.spotify.common.Spotify;
-import sdis.spotify.media.Media;
-
-import javax.swing.*;
+import sdis.spotify.common.Media;
 
 public class ClientReadL {
     public static void main(String [] arg) {

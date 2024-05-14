@@ -1,4 +1,4 @@
-package sdis.spotify.media;
+package sdis.spotify.common;
 
 import java.io.IOException;
 /**

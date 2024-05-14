@@ -1,9 +1,7 @@
 package sdis.spotify.client.unit;
 
 import sdis.spotify.common.Spotify;
-import sdis.spotify.media.Media;
-
-import javax.swing.*;
+import sdis.spotify.common.Media;
 
 public class ClientAdd2L {
     public static void main(String [] arg) {
@@ -20,9 +18,7 @@ public class ClientAdd2L {
             o1.addComment("Esta bien duro manin");
             o1.addScore(7);
             o1.addScore(7.6);
-            //ImageIcon io1 = new ImageIcon("./Cover/EsclavaRemix.jpg");
-
-            //o1.setCover(io1);
+            o1.loadCover("./Cover/EsclavaRemix.jpg");
 
 
 
@@ -38,6 +34,8 @@ public class ClientAdd2L {
             o2.addScore(10);
             o2.addScore(9);
             o2.addScore(9);
+            o2.loadCover("./Cover/Elnano.jpg");
+
 
 
             Media o3 = new Media("Kemba walker");
@@ -46,13 +44,13 @@ public class ClientAdd2L {
             o3.addComment("Soy de la H");
             o3.addScore(7.9);
             o3.addScore(8.3);
+            o3.loadCover("./Cover/KembaWalker.jpg");
 
             s.add2L(o1);
             s.add2L(o2);
             s.add2L(o3);
 
 
-            //o1.showCover();
             System.out.println(o1.toString());
             System.out.println(o2.toString());
             System.out.println(o3.toString());
