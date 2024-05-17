@@ -1,19 +1,25 @@
 package sdis.spotify.server;
 
+import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import sdis.spotify.common.Spotify;
+import sdis.spotify.common.SpotifyClient;
+import sdis.spotify.common.SpotifyServer;
 import sdis.spotify.common.Globals;
 import sdis.spotify.common.Media;
 
 
-public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements Spotify{
+public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements Spotify, SpotifyServer{
     
     ConcurrentHashMap<String,Media> directorio = new ConcurrentHashMap<>();
     MultiMap<String,Media> contenido = new MultiMap<>();
+    private SpotifyClient cliente;
+
+    // Hashmap concurrente de credenciales
     private static final ConcurrentHashMap<String, String> credenciales = new ConcurrentHashMap<>();
     static{
         credenciales.put("hector", "1234");
@@ -21,14 +27,15 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /*
-     * Constructor
+     * Constructor del servidor.
      */
     public SpotifyImpl() throws RemoteException{
         super();
     }
 
     /**
-     * Método de bienvenido al servidor, simplemente se retorna una bienvenida.
+     * Método de bienvenida al servidor, simplemente se retorna una bienvenida.
+     * @return Bienvenida al servidor.
      * @throws RemoteException
      */
     public String hello() throws RemoteException{
@@ -44,8 +51,8 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * Método de identificación del usuario.
      * @param username del usuario.
      * @param password del usuario.
+     * @return "AUTH" / "NOTAUTH" en función de si se ha identificado con éxito o no.
      * @throws RemoteException
-     * 
      */
     public String auth(String username, String password) throws RemoteException {
         String res ;
@@ -86,8 +93,9 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * @throws RemoteException
      */
     public void add2L(String playlist, Media elemento) throws RemoteException {
-        contenido.push(playlist, elemento);
         directorio.put(elemento.getName(), elemento);
+        contenido.push(playlist, directorio.get(elemento.getName()));
+        
         try {
             System.out.println(this.getClientHost()+"-> Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
 
@@ -137,6 +145,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * Leer media de manera no destructiva, sin eliminar el objeto de la playlist "DEFAULT".
      * @return el elemento media o null.
      * @throws RemoteException
+     * @throws ServerNotActiveException 
      */
     public Media peekL() throws RemoteException {
         String playlist = "DEFAULT";
@@ -158,6 +167,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * @param playlist a obtener el objeto media.
      * @return El objeto media o null.
      * @throws RemoteException
+     * @throws ServerNotActiveException
      */
     public Media peekL(String playlist) throws RemoteException {
         Media elem = contenido.peek(playlist);
@@ -175,6 +185,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * @param playlist a borrar.
      * @return "DELETED" si eliminada o "EMPTY" si no existe la playlist o en caso de que no se borre la playlist.
      * @throws RemoteException
+     * @throws ServerNotActiveException
      */
     public String deleteL(String playlist) throws RemoteException {
         String res;
@@ -197,7 +208,12 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         return res;
     }
 
-
+    /**
+     * Obtener el contenido del directorio global de elementos en forma de String.
+     * @return Todo el contenido concatenado en un String.
+     * @throws RemoteException
+     * @throws ServerNotActiveException
+     */
     public String getDirectoryList() throws RemoteException {
         Set<String> keys = this.directorio.keySet();
         String keysAsString = String.join(", ", keys);
@@ -210,7 +226,13 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         return keysAsString;
     }
 
-
+    /**
+     * Permite recuperar un elemento del directorio.
+     * @param elemento, ID del elemento en el directorio.
+     * @return objeto media deseado.
+     * @throws RemoteException
+     * @throws ServerNotActiveException
+     */
     public Media retrieveMedia(String elemento) throws RemoteException {
         try {
             System.out.println(this.getClientHost()+"-> retrieve-directory-element-media: "+elemento);
@@ -221,18 +243,37 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         return this.directorio.get(elemento);
     }
 
-    //TODO
+    /**
+     * Permite cambiar la carátula/imagen/cover predefinida del elemento,
+     * es necesario que la canción esté añadida en el directorio global.
+     * @param objeto media con la imagen deseada ya cargada.
+     * @return "COVER ADDED" / "COVER NOT ADDED" en función si la operación ha sido realizada con éxito.
+     */
     public String setCover(Media objeto) throws RemoteException {
-        return null;
+        if (this.directorio.containsKey(objeto.getName())){
+            this.directorio.remove(objeto.getName());
+            this.directorio.put(objeto.getName(), objeto);
+            return "COVER ADDED";
+        } else return "COVER NOT ADDED";
     }
 
+    /**
+     * Añadir una puntuación 0-10 al objeto media guardado en el directorio.
+     * Es necesario que la canción se encuentre en el directorio.
+     * @param elemento canción.
+     * @param score [0,10] que queremos añadir.
+     * @throws remoteException
+     * @return "SCORE ADDED" si se añadió correctamente, "NOT A SCORE" si no está [0,10], "MEDIA NOT IN DIRECTORY" si la canción no está en el directorio
+     */
     public String addScore(String elemento, double score) throws RemoteException{
-        boolean Flag = comprobarScore(score);
         String res;
-        if (Flag){
-            this.directorio.get(elemento).addScore(score);
-            res= "SCORE ADDED";
-        } else res= "NOT A SCORE";
+
+        if (this.directorio.containsKey(elemento)){
+            if (comprobarScore(score)){
+                this.directorio.get(elemento).addScore(score);
+                res= "SCORE ADDED";
+            } else res= "NOT A SCORE";
+        } else res = "MEDIA NOT IN DIRECTORY";
         try {
             System.out.println(this.getClientHost()+"-> add-score-to-directory-element-media "+elemento+": "+res);
 
@@ -242,13 +283,24 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         return res;
     }
 
+    /**
+     * Añadir un comentario al objeto media guardado en el directorio.
+     * Es necesario que la canción se encuentre en el directorio.
+     * @param elemento canción.
+     * @param comentario que queremos añadir.
+     * @throws remoteException
+     * @return "COMMENT ADDED" si se añadió correctamente, "NOT ALLOWED COMMENT" si la longitud del comentario supera los 100 caracteres, "MEDIA NOT IN DIRECTORY" si la canción no está en el directorio
+     
+     */
     public String addComment(String elemento, String comentario) throws RemoteException{
-        boolean Flag = comprobarComentario(comentario);
         String res;
-        if (Flag){
-            this.directorio.get(elemento).addComment(comentario);
-            res = "COMMENT ADDED";
-        } else res =  "NOT ALLOWED COMMENT";
+
+        if (this.directorio.containsKey(elemento)){
+            if (comprobarComentario(comentario)){
+                this.directorio.get(elemento).addComment(comentario);
+                res = "COMMENT ADDED";
+            } else res =  "NOT ALLOWED COMMENT";
+        } else res = "MEDIA NOT IN DIRECTORY";
         try {
             System.out.println(this.getClientHost()+"-> add-comment-to-directory-element-media "+elemento+": "+res);
 
@@ -258,6 +310,36 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         return res;
     }
 
+    
+    // Métodos interfaz SpotifyServer
+    /**
+     * Asociar la interfaz cliente al servidor.
+     * @param cliente interfaz.
+     * @return Asignación realizada correctamente.
+     * @throws RemoteException
+     */
+    public boolean setClientStreamReceptor(SpotifyClient cliente) throws RemoteException {
+        this.cliente = cliente;
+        return true;
+    }
+
+    /**
+     * Indicar al servidor el deseo de escuchar una canción.
+     * @return
+     * @throws RemoteException
+     */
+    public String randomPlay() throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'randomPlay'");
+    }
+
+    public String startMedia(Media media) throws RemoteException, FileNotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'startMedia'");
+    }
+
+
+    // Métodos privados
     private boolean comprobarComentario(String comentario) {
         return comentario.length() <= 100;
     }

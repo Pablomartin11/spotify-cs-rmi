@@ -1,18 +1,28 @@
 package sdis.spotify.client;
 
 import java.rmi.RemoteException;
-
 import sdis.spotify.common.Globals;
 import sdis.spotify.common.Media;
 import sdis.spotify.common.MediaPlayer;
+import sdis.spotify.common.SpotifyClient;
 
-public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements sdis.spotify.common.SpotifyClient {
+public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements SpotifyClient {
+    private Thread playerThread;
+
+    /**
+     * Constructor del cliente.
+     * @throws RemoteException
+     */
     protected ClientImpl() throws RemoteException {
         super();
     }
 
-    private Thread playerThread;
-
+    /**
+     * Lanzar el reproductor multimedia en el lado del cliente.
+     * @param cancion que se quiere reproducir.
+     * @return Reproductor lanzado correctamente.
+     * @throws RemoteException
+     */
     public boolean launchMediaPlayer(Media cancion) throws RemoteException {
         try{
             MediaPlayer mediaplayer = new MediaPlayer(
@@ -30,10 +40,22 @@ public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements s
         }
     }
 
+    /**
+     * Comprobar si el reproductor está activo.
+     * @return Reproductor activo.
+     * @throws RemoteException
+     */
     public boolean isMediaPlayerActive() throws RemoteException {
         return playerThread.isAlive();
     }
 
+    /**
+     * Iniciar la transmisión de bytes que conforman el streaming de la canción.
+     * @param media que se quiere reproducir.
+     * @param ip por el medio del cual se realiza la transmisión de bytes.
+     * @param puerto
+     * @throws RemoteException
+     */
     public void startStream(Media media, String ip, int puerto) throws RemoteException {
         ClientStream cs = new ClientStream();
         new Thread(cs, "clientstream").start();
