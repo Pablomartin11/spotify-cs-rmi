@@ -1,6 +1,7 @@
 package sdis.spotify.server;
 
 import java.io.FileNotFoundException;
+import java.net.ServerSocket;
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Set;
@@ -9,8 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import sdis.spotify.common.Spotify;
 import sdis.spotify.common.SpotifyClient;
 import sdis.spotify.common.SpotifyServer;
-import sdis.spotify.common.Globals;
-import sdis.spotify.common.Media;
+import sdis.spotify.media.Globals;
+import sdis.spotify.media.Media;
+import sdis.spotify.stream.ServerStream;
 
 
 public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements Spotify, SpotifyServer{
@@ -334,8 +336,40 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     public String startMedia(Media media) throws RemoteException, FileNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'startMedia'");
+        // 1. CHECKS
+        if (media == null) {
+            throw new IllegalArgumentException("El objeto Media no puede ser null");
+        }
+        if (!directorio.containsKey(media.getName())) {
+            throw new IllegalArgumentException("El objeto Media no existe en el directorio");
+        }
+        // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
+        String pathFile =Globals.path_origin+media.getName()+Globals.file_extension;
+        ServerStream ss = new ServerStream(pathFile, cliente);
+        new Thread(ss, "streamserver").start();
+
+        try{ Thread.sleep(2000); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        // 3. LAUNCH CLIENT MEDIAPLAYER
+        System.out.println("- Checking MediaPlayer status...");
+        try {
+            if (!cliente.launchMediaPlayer(media)) {
+                return "Launcher cannot be triggered";
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error launching Media Player at client";
+        }
+        // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
+        System.out.println("- Sending server streaming ready signal..."+Globals.server_host+":"+ss.getServerSocketPort());
+        try {
+            cliente.startStream(media, Globals.server_host, ss.getServerSocketPort());
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error during streaming at client";
+        }
+        return "MEDIA "+media.getName()+" started";
     }
 
 

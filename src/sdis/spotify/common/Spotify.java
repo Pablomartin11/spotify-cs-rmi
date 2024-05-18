@@ -1,5 +1,7 @@
 package sdis.spotify.common;
 
+import sdis.spotify.media.Media;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

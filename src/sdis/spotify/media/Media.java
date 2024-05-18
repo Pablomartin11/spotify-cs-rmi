@@ -1,4 +1,4 @@
-package sdis.spotify.common;
+package sdis.spotify.media;
 
 import javax.swing.*;
 import java.awt.*;

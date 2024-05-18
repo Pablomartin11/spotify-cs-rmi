@@ -1,4 +1,4 @@
-package sdis.spotify.common;
+package sdis.spotify.media;
 
 public class Globals {
     public static final String hello_banner =

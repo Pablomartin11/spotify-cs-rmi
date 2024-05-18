@@ -1,5 +1,7 @@
 package sdis.spotify.common;
 
+import sdis.spotify.media.Media;
+
 import java.io.FileNotFoundException;
 
 public interface SpotifyServer extends java.rmi.Remote{

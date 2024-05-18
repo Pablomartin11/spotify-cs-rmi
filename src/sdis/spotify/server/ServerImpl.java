@@ -3,7 +3,7 @@ package sdis.spotify.server;
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 
-import sdis.spotify.common.Media;
+import sdis.spotify.media.Media;
 import sdis.spotify.common.SpotifyClient;
 
 public class ServerImpl extends java.rmi.server.UnicastRemoteObject implements sdis.spotify.common.SpotifyServer{

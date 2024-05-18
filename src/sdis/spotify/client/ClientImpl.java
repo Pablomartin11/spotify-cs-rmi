@@ -1,9 +1,9 @@
 package sdis.spotify.client;
 
 import java.rmi.RemoteException;
-import sdis.spotify.common.Globals;
-import sdis.spotify.common.Media;
-import sdis.spotify.common.MediaPlayer;
+import sdis.spotify.media.Globals;
+import sdis.spotify.media.Media;
+import sdis.spotify.media.MediaPlayer;
 import sdis.spotify.common.SpotifyClient;
 
 public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements SpotifyClient {
