@@ -41,7 +41,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
      */
     public String hello() throws RemoteException{
         try {
-            System.out.println(this.getClientHost()+"-> ping-check-server");
+            System.out.println(this.getClientHost()+" > ping-check-server");
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
             res =  "NOTAUTH";
         }
         try {
-            System.out.println(this.getClientHost()+"-> login :"+res);
+            System.out.println(this.getClientHost()+" > login: "+res);
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
         }
@@ -82,7 +82,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         contenido.push(playlist, directorio.get(elemento.getName()));
 
         try {
-            System.out.println(this.getClientHost()+"-> Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
+            System.out.println(this.getClientHost()+" > Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
         }
@@ -99,7 +99,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         contenido.push(playlist, directorio.get(elemento.getName()));
         
         try {
-            System.out.println(this.getClientHost()+"-> Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
+            System.out.println(this.getClientHost()+" > Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         Media elem = contenido.pop(playlist);
 
         try {
-            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida y eliminada de Playlist: "+playlist);
+            System.out.println(this.getClientHost()+" > Canción: "+elem.getName()+" leida y eliminada de Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         Media elem = contenido.pop(playlist);
 
         try {
-            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida y eliminada de Playlist: "+playlist);
+            System.out.println(this.getClientHost()+" > Canción: "+elem.getName()+" leida y eliminada de Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -155,7 +155,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         Media elem = contenido.peek(playlist);
 
         try {
-            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida de Playlist: "+playlist);
+            System.out.println(this.getClientHost()+" > Canción: "+elem.getName()+" leida de Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -174,7 +174,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
     public Media peekL(String playlist) throws RemoteException {
         Media elem = contenido.peek(playlist);
         try {
-            System.out.println(this.getClientHost()+"-> Canción: "+elem.getName()+" leida de Playlist: "+playlist);
+            System.out.println(this.getClientHost()+" > Canción: "+elem.getName()+" leida de Playlist: "+playlist);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -202,7 +202,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
             res= "EMPTY";
         }
         try {
-            System.out.println(this.getClientHost()+"-> delete-list "+playlist+" : "+res);
+            System.out.println(this.getClientHost()+" > delete-list "+playlist+": "+res);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -220,7 +220,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         Set<String> keys = this.directorio.keySet();
         String keysAsString = String.join(", ", keys);
         try {
-            System.out.println(this.getClientHost()+"-> get-directory-list");
+            System.out.println(this.getClientHost()+" > get-directory-list");
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -237,7 +237,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
      */
     public Media retrieveMedia(String elemento) throws RemoteException {
         try {
-            System.out.println(this.getClientHost()+"-> retrieve-directory-element-media: "+elemento);
+            System.out.println(this.getClientHost()+" > retrieve-directory-element-media: "+elemento);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -277,7 +277,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
             } else res= "NOT A SCORE";
         } else res = "MEDIA NOT IN DIRECTORY";
         try {
-            System.out.println(this.getClientHost()+"-> add-score-to-directory-element-media "+elemento+": "+res);
+            System.out.println(this.getClientHost()+" > add-score-to-directory-element-media "+elemento+": "+res);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -304,7 +304,7 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
             } else res =  "NOT ALLOWED COMMENT";
         } else res = "MEDIA NOT IN DIRECTORY";
         try {
-            System.out.println(this.getClientHost()+"-> add-comment-to-directory-element-media "+elemento+": "+res);
+            System.out.println(this.getClientHost()+" > add-comment-to-directory-element-media "+elemento+": "+res);
 
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
@@ -335,14 +335,22 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         throw new UnsupportedOperationException("Unimplemented method 'randomPlay'");
     }
 
+    /**
+     * Método para escuchar una canción deseada.
+     * @param media que queremos escuchar.
+     * @throws RemoteException
+     * @throws FileNotfoundException
+     * @return Estado de la operación
+     */
     public String startMedia(Media media) throws RemoteException, FileNotFoundException {
         // 1. CHECKS
-        if (media == null) {
-            throw new IllegalArgumentException("El objeto Media no puede ser null");
+        if (media.equals(null)) {
+            return "MEDIA cannot be NULL";
         }
         if (!directorio.containsKey(media.getName())) {
-            throw new IllegalArgumentException("El objeto Media no existe en el directorio");
+            return "MEDIA not in directory";
         }
+
         // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
         String pathFile =Globals.path_origin+media.getName()+Globals.file_extension;
         ServerStream ss = new ServerStream(pathFile, cliente);
@@ -354,17 +362,18 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
         // 3. LAUNCH CLIENT MEDIAPLAYER
         System.out.println("- Checking MediaPlayer status...");
         try {
-            if (!SpotifyClient.launchMediaPlayer(media)) {
+            if (!this.cliente.launchMediaPlayer(media)) {
                 return "Launcher cannot be triggered";
             }
         } catch (Exception e){
             e.printStackTrace();
             return "Error launching Media Player at client";
         }
+
         // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
         System.out.println("- Sending server streaming ready signal..."+Globals.server_host+":"+ss.getServerSocketPort());
         try {
-            SpotifyClient.startStream(media, Globals.server_host, ss.getServerSocketPort());
+            this.cliente.startStream(media, Globals.server_host, ss.getServerSocketPort());
         } catch (Exception e){
             e.printStackTrace();
             return "Error during streaming at client";

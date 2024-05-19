@@ -14,6 +14,7 @@ public class ClientStream implements Runnable{
     private Thread activeMediaPlayer;
     private String FILE_TO_RECEIVE;
     private int FILE_PACKET_SIZE;
+    
     public ClientStream(Media media, String server, int port, Thread player){
         this.FILE_TO_RECEIVE = Globals.path_destination+media.getName()+
                 Globals.file_extension;

@@ -1,12 +1,13 @@
 package sdis.spotify.server;
 
 import sdis.spotify.common.Spotify;
+import sdis.spotify.common.SpotifyServer;
 
 public class Lanzador {
     public static void main(String [] args){
         try{
             // Declaracion de objetos remotos
-            Spotify spotify = new SpotifyServerImpl();
+            SpotifyServerImpl spotify = new SpotifyServerImpl();
 
             // Accedemos a una referencia al registro (rmiregistry) local
 

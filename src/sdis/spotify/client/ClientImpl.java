@@ -5,6 +5,7 @@ import sdis.spotify.media.Globals;
 import sdis.spotify.media.Media;
 import sdis.spotify.media.MediaPlayer;
 import sdis.spotify.common.SpotifyClient;
+import sdis.spotify.stream.ClientStream;
 
 public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements SpotifyClient {
     private Thread playerThread;
@@ -13,7 +14,7 @@ public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements S
      * Constructor del cliente.
      * @throws RemoteException
      */
-    protected ClientImpl() throws RemoteException {
+    public ClientImpl() throws RemoteException {
         super();
     }
 
@@ -57,7 +58,7 @@ public class ClientImpl extends java.rmi.server.UnicastRemoteObject implements S
      * @throws RemoteException
      */
     public void startStream(Media media, String ip, int puerto) throws RemoteException {
-        ClientStream cs = new ClientStream();
+        ClientStream cs = new ClientStream(media,ip,puerto,playerThread);
         new Thread(cs, "clientstream").start();
     }
     

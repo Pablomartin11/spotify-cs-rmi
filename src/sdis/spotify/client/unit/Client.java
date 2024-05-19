@@ -1,25 +1,36 @@
 package sdis.spotify.client.unit;
 
+import sdis.spotify.client.ClientImpl;
 import sdis.spotify.common.Spotify;
+import sdis.spotify.common.SpotifyClient;
+import sdis.spotify.common.SpotifyServer;
 import sdis.spotify.media.Media;
 import java.util.Scanner;
 public class Client {
     public static void main(String [] arg) {
-
         Scanner scanner = new Scanner(System.in);
-
-
         try{
-            //Bienvenida
-            Spotify s = (Spotify) java.rmi.Naming.lookup("spotify");
+            // Conexion
+            Object remoto = java.rmi.Naming.lookup("spotify");
+            Spotify s = (Spotify) remoto;
+            SpotifyServer server = (SpotifyServer) remoto;
+
+            // Bienvenida
             String r = s.hello();
             System.out.println(r);
-            //Registro
-            r = s.auth("alex","PPP");
-            System.out.println(r);
-            r = s.auth("hector","1234");
-            System.out.println(r);
-            //Añadir Canciones y Playlist
+
+            // Registro
+            while(!r.equals("AUTH")){
+                System.out.print("Usuario:  ");
+                String usr = scanner.next();
+
+                System.out.print("Contraseña:  ");
+                String pswd = scanner.next();
+                r = s.auth(usr,pswd);
+                System.out.println("Server > "+r+"\n");
+            }
+            
+            // Añadir Canciones y Playlist
             Media o1 = new Media("Cancion 1");
             Media o2 = new Media("Cancion 2");
             Media o3 = new Media("Cancion 3");
@@ -28,47 +39,60 @@ public class Client {
             s.add2L("Playlist1",o1);
             s.add2L("Playlist1",o2);
             s.add2L("Playlist1",o3);
-            //Leer cancion destructiva
+
+            // Leer cancion destructiva
             Media c = s.readL();
             System.out.println("Cancion leida y eliminada: "+c.getName());
             c = s.readL("Playlist1");
             System.out.println("Cancion leida y eliminada: "+c.getName());
-            //Leer cancion no destructiva
+
+            // Leer cancion no destructiva
             c = s.peekL();
             System.out.println("Cancion leida: "+c.getName());
             c = s.peekL("Playlist1");
             System.out.println("Cancion leida: "+c.getName());
-            //Borrar playlist
+
+            // Borrar playlist
             r = s.deleteL("Playlist1");
             System.out.println(r);
             r = s.deleteL("Playlist1");
             System.out.println(r);
-            //get-directory-list
+
+            // get-directory-list
             r = s.getDirectoryList();
             System.out.println(r);
-            //recuperar elemento del directorio
+
+            // recuperar elemento del directorio
             c = s.retrieveMedia("Cancion 1");
             System.out.println("Cancion recuperada: "+c.getName());
             r = s.getDirectoryList();
             System.out.println(r);
-            //Cambiar caratula
+
+            // Cambiar caratula
             //TODO
 
-            //añadir puntuacion
+            // Añadir puntuacion
             r = s.addScore("Cancion 1",9.8);
             System.out.println(r);
             r = s.addScore("Cancion 2",10.01);
             System.out.println(r);
 
-            //Añadir comentario
+            // Añadir comentario
             r = s.addComment("Cancion 1","buena cancion");
             System.out.println(r);
             r = s.addComment("Cancion 1","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             System.out.println(r);
 
+            // Iniciar cancion
+            SpotifyClient cliente = new ClientImpl();
+            System.out.println(server.setClientStreamReceptor(cliente));
+            System.out.println(server.startMedia(o1));
+
 
         }catch(Exception e){
             e.printStackTrace();
+        }finally{
+            scanner.close();;
         }
 
     }
