@@ -6,7 +6,7 @@ public class Lanzador {
     public static void main(String [] args){
         try{
             // Declaracion de objetos remotos
-            Spotify spotify = new SpotifyImpl();
+            Spotify spotify = new SpotifyServerImpl();
 
             // Accedemos a una referencia al registro (rmiregistry) local
 

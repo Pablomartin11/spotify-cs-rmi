@@ -1,7 +1,6 @@
 package sdis.spotify.server;
 
 import java.io.FileNotFoundException;
-import java.net.ServerSocket;
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Set;
@@ -15,7 +14,7 @@ import sdis.spotify.media.Media;
 import sdis.spotify.stream.ServerStream;
 
 
-public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements Spotify, SpotifyServer{
+public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject implements Spotify, SpotifyServer{
     
     ConcurrentHashMap<String,Media> directorio = new ConcurrentHashMap<>();
     MultiMap<String,Media> contenido = new MultiMap<>();
@@ -31,7 +30,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
     /*
      * Constructor del servidor.
      */
-    public SpotifyImpl() throws RemoteException{
+    public SpotifyServerImpl() throws RemoteException{
         super();
     }
 
@@ -79,8 +78,9 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     public void add2L(Media elemento) throws RemoteException {
         String playlist = "DEFAULT";
-        contenido.push(playlist, elemento);
         directorio.put(elemento.getName(), elemento);
+        contenido.push(playlist, directorio.get(elemento.getName()));
+
         try {
             System.out.println(this.getClientHost()+"-> Canción: "+elemento.getName()+" añadida a Playlist: "+playlist);
         } catch (ServerNotActiveException e) {
@@ -264,7 +264,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * Es necesario que la canción se encuentre en el directorio.
      * @param elemento canción.
      * @param score [0,10] que queremos añadir.
-     * @throws remoteException
+     * @throws RemoteException
      * @return "SCORE ADDED" si se añadió correctamente, "NOT A SCORE" si no está [0,10], "MEDIA NOT IN DIRECTORY" si la canción no está en el directorio
      */
     public String addScore(String elemento, double score) throws RemoteException{
@@ -290,7 +290,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
      * Es necesario que la canción se encuentre en el directorio.
      * @param elemento canción.
      * @param comentario que queremos añadir.
-     * @throws remoteException
+     * @throws RemoteException
      * @return "COMMENT ADDED" si se añadió correctamente, "NOT ALLOWED COMMENT" si la longitud del comentario supera los 100 caracteres, "MEDIA NOT IN DIRECTORY" si la canción no está en el directorio
      
      */
@@ -312,7 +312,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         return res;
     }
 
-    
+
     // Métodos interfaz SpotifyServer
     /**
      * Asociar la interfaz cliente al servidor.
@@ -354,7 +354,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         // 3. LAUNCH CLIENT MEDIAPLAYER
         System.out.println("- Checking MediaPlayer status...");
         try {
-            if (!cliente.launchMediaPlayer(media)) {
+            if (!SpotifyClient.launchMediaPlayer(media)) {
                 return "Launcher cannot be triggered";
             }
         } catch (Exception e){
@@ -364,7 +364,7 @@ public class SpotifyImpl extends java.rmi.server.UnicastRemoteObject implements 
         // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
         System.out.println("- Sending server streaming ready signal..."+Globals.server_host+":"+ss.getServerSocketPort());
         try {
-            cliente.startStream(media, Globals.server_host, ss.getServerSocketPort());
+            SpotifyClient.startStream(media, Globals.server_host, ss.getServerSocketPort());
         } catch (Exception e){
             e.printStackTrace();
             return "Error during streaming at client";

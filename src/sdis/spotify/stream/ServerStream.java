@@ -14,7 +14,7 @@ public class ServerStream implements Runnable{
     private String fileToSend;
     private int serverSocketPort;
     private SpotifyClient client;
-    private String streamLog = Globals.log_path+"streams"+Globals.log_extension;
+    private final String streamLog = Globals.log_path+"streams"+Globals.log_extension;
     public ServerStream(String fileToSend, SpotifyClient client){
         this.fileToSend = fileToSend;
         this.client = client;
