@@ -31,8 +31,8 @@ public class Client {
             }
             
             // Añadir Canciones y Playlist
-            Media o1 = new Media("Cancion 1");
-            Media o2 = new Media("Cancion 2");
+            Media o1 = new Media("Esclava_Remix");
+            Media o2 = new Media("ElNano");
             Media o3 = new Media("Cancion 3");
             s.add2L(o1);
             s.add2L(o2);
@@ -63,7 +63,7 @@ public class Client {
             System.out.println(r);
 
             // recuperar elemento del directorio
-            c = s.retrieveMedia("Cancion 1");
+            c = s.retrieveMedia("Esclava_Remix");
             System.out.println("Cancion recuperada: "+c.getName());
             r = s.getDirectoryList();
             System.out.println(r);
@@ -72,21 +72,21 @@ public class Client {
             //TODO
 
             // Añadir puntuacion
-            r = s.addScore("Cancion 1",9.8);
+            r = s.addScore("Esclava_Remix",9.8);
             System.out.println(r);
-            r = s.addScore("Cancion 2",10.01);
+            r = s.addScore("ElNano",10.01);
             System.out.println(r);
 
             // Añadir comentario
-            r = s.addComment("Cancion 1","buena cancion");
+            r = s.addComment("Esclava_Remix","buena cancion");
             System.out.println(r);
-            r = s.addComment("Cancion 1","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            r = s.addComment("Esclava_Remix","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             System.out.println(r);
 
             // Iniciar cancion
             SpotifyClient cliente = new ClientImpl();
             System.out.println(server.setClientStreamReceptor(cliente));
-            System.out.println(server.startMedia(o1));
+            System.out.println(server.startMedia(o2));
 
 
         }catch(Exception e){
