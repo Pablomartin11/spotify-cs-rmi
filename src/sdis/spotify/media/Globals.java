@@ -20,12 +20,12 @@ public class Globals {
     public static String log_stream = " [STREAM] Streaming to: ";
     public static String log_stream_end = " [STREAM] Stream finished. Tx Bytes: ";
     // Streaming paths
-    public static String server_host = "localhost";
+    public static String server_host = "172.20.20.13";
     public static int server_port = 20099;
     public static String path_origin = "./mp3files/origin/";
     public static String path_destination = "./mp3files/destination/";
     // Streaming media player config
-    public static int player_delay_ms = 3000;
+    public static int player_delay_ms = 1500;
     public static String file_extension = ".mp3";
     public static String player_command = "firefox";
     //public static String player_command = "vlc";

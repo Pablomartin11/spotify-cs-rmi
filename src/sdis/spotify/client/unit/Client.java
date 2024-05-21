@@ -10,8 +10,9 @@ public class Client {
     public static void main(String [] arg) {
         Scanner scanner = new Scanner(System.in);
         try{
+            System.setProperty("java.rmi.server.hostname","172.20.10.5");
             // Conexion
-            Object remoto = java.rmi.Naming.lookup("spotify");
+            Object remoto = java.rmi.Naming.lookup("rmi://172.20.10.13:1099/spotify");
             Spotify s = (Spotify) remoto;
             SpotifyServer server = (SpotifyServer) remoto;
 
