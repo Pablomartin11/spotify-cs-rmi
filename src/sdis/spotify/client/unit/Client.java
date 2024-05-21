@@ -34,40 +34,40 @@ public class Client {
             // Añadir Canciones y Playlist
             Media o1 = new Media("Esclava_Remix");
             Media o2 = new Media("ElNano");
-            Media o3 = new Media("Cancion 3");
+            //Media o3 = new Media("Cancion 3");
             s.add2L(o1);
             s.add2L(o2);
             s.add2L("Playlist1",o1);
             s.add2L("Playlist1",o2);
-            s.add2L("Playlist1",o3);
+            //s.add2L("Playlist1",o3);
 
             // Leer cancion destructiva
-            Media c = s.readL();
-            System.out.println("Cancion leida y eliminada: "+c.getName());
-            c = s.readL("Playlist1");
-            System.out.println("Cancion leida y eliminada: "+c.getName());
+            //Media c = s.readL();
+            //System.out.println("Cancion leida y eliminada: "+c.getName());
+            //c = s.readL("Playlist1");
+            //System.out.println("Cancion leida y eliminada: "+c.getName());
 
             // Leer cancion no destructiva
-            c = s.peekL();
-            System.out.println("Cancion leida: "+c.getName());
-            c = s.peekL("Playlist1");
-            System.out.println("Cancion leida: "+c.getName());
+            //c = s.peekL();
+            //System.out.println("Cancion leida: "+c.getName());
+            //c = s.peekL("Playlist1");
+            //System.out.println("Cancion leida: "+c.getName());
 
             // Borrar playlist
-            r = s.deleteL("Playlist1");
-            System.out.println(r);
-            r = s.deleteL("Playlist1");
-            System.out.println(r);
+            //r = s.deleteL("Playlist1");
+            //System.out.println(r);
+            //r = s.deleteL("Playlist1");
+            //System.out.println(r);
 
             // get-directory-list
             r = s.getDirectoryList();
             System.out.println(r);
 
             // recuperar elemento del directorio
-            c = s.retrieveMedia("Esclava_Remix");
-            System.out.println("Cancion recuperada: "+c.getName());
-            r = s.getDirectoryList();
-            System.out.println(r);
+            //c = s.retrieveMedia("Esclava_Remix");
+            //System.out.println("Cancion recuperada: "+c.getName());
+            //r = s.getDirectoryList();
+            //System.out.println(r);
 
             // Cambiar caratula
             //TODO
@@ -87,7 +87,7 @@ public class Client {
             // Iniciar cancion
             SpotifyClient cliente = new ClientImpl();
             System.out.println(server.setClientStreamReceptor(cliente));
-            System.out.println(server.startMedia(o2));
+            System.out.println(server.randomPlay());
 
 
         }catch(Exception e){
