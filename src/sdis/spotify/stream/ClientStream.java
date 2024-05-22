@@ -4,6 +4,10 @@ import sdis.spotify.media.Globals;
 import sdis.spotify.media.Media;
 import java.io.*;
 import java.net.Socket;
+
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.SSLSocket;
+
 /**
  * Stream class ClientStream
  * @author hector
@@ -26,13 +30,15 @@ public class ClientStream implements Runnable{
     public void run(){
         int bytesRead;
         int currentBytes = 0;
-        Socket sock = null;
+        SSLSocket sock = null;
         InputStream is = null;
         FileOutputStream fos = null;
         BufferedOutputStream bos = null;
         try {
             System.out.println(">> Stream connecting to "+serverStreaming+":"+serverStreamingPort);
-            sock = new Socket(serverStreaming, serverStreamingPort);
+            SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            sock = (SSLSocket) factoria.createSocket(serverStreaming,serverStreamingPort);
+
             is = sock.getInputStream();
             File file = new File(FILE_TO_RECEIVE);
             file.getParentFile().mkdirs();

@@ -13,7 +13,10 @@ public class Client {
             //System.setProperty("java.rmi.server.hostname","172.20.10.5");
             // Conexion
             //Object remoto = java.rmi.Naming.lookup("rmi://172.20.10.13:1099/spotify");
-            Object remoto = java.rmi.Naming.lookup("spotify");
+
+            javax.rmi.ssl.SslRMIClientSocketFactory rmicsf = new javax.rmi.ssl.SslRMIClientSocketFactory();
+            java.rmi.registry.Registry reg = java.rmi.registry.LocateRegistry.getRegistry("localhost", 1099, rmicsf);
+            Object remoto = reg.lookup("spotify");
             Spotify s = (Spotify) remoto;
             SpotifyServer server = (SpotifyServer) remoto;
 

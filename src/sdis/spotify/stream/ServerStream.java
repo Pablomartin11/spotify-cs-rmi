@@ -6,6 +6,11 @@ import sdis.spotify.server.Utils;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+
 /**
  * Stream class ServerStream
  * @author hector
@@ -24,10 +29,12 @@ public class ServerStream implements Runnable{
     }
     public void run(){
         try {
-            ServerSocket servsock = new ServerSocket(0);
-            this.serverSocketPort = servsock.getLocalPort();
+            SSLServerSocketFactory factoriaServer = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+            SSLServerSocket socketServidor = (SSLServerSocket) factoriaServer.createServerSocket(0);
+            this.serverSocketPort = socketServidor.getLocalPort();
             System.out.println("--Stream Waiting...");
-            Socket sock = servsock.accept();
+            SSLSocket sock = (SSLSocket) socketServidor.accept();
+
             System.out.println("--Accepted connection : " + sock+"\n");
             Utils.logMsg(streamLog, Utils.nowDate()+Globals.log_stream+sock);
             OutputStream os = null;
@@ -59,7 +66,7 @@ public class ServerStream implements Runnable{
                 os.close();
                 fis.close();
                 bis.close();
-                servsock.close();
+                socketServidor.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

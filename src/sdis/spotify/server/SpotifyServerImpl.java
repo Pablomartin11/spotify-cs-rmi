@@ -33,8 +33,8 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
     /*
      * Constructor del servidor.
      */
-    public SpotifyServerImpl() throws RemoteException{
-        super();
+    public SpotifyServerImpl(java.rmi.server.RMIClientSocketFactory rmicsf, java.rmi.server.RMIServerSocketFactory rmissf) throws RemoteException{
+        super(0,rmicsf,rmissf);
     }
 
     /**
