@@ -27,8 +27,9 @@ public class Globals {
     // Streaming media player config
     public static int player_delay_ms = 1500;
     public static String file_extension = ".mp3";
-    public static String player_command = "firefox";
+    //public static String player_command = "firefox";
     //public static String player_command = "vlc";
+    public static String player_command = "google-chrome";
     public static String player_abs_filepath = "./mp3files/destination/";
     // WIN CONFIGS
 //public static String player_command = "wmplayer";
