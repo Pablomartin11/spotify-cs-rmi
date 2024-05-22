@@ -17,11 +17,10 @@ public class ClientPlayList {
             String r = s.hello();
             System.out.println(r);
 
-
             int vacio=0;
             while(vacio==0){
                 try{
-                    Media o1 = s.peekL("Playlist1");
+                    Media o1 = s.readL("Playlist1");
                     System.out.println("Siguiente canción: "+o1.getName());
                     String opcion = scanner.next();
 
@@ -34,13 +33,20 @@ public class ClientPlayList {
                         case "2":
                             break;
                         case "3":
-                            break;
+
                         default:
                             break;
+                    }
+
+                    if (opcion.equals("3")) {
+                        System.out.println("Cerrando programa...");
+                        break;
 
                     }
+
                 }catch (Exception e){
                     vacio =1;
+                    System.out.println("No hay más canciones");
                 }
 
             }

@@ -26,3 +26,13 @@
 2024-05-22 20:08:25 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=55516,localport=46175]
 2024-05-22 20:08:27 [STREAM] Stream finished. Tx Bytes: 1048064
 2024-05-22 20:08:36 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=33784,localport=38163]
+2024-05-22 20:21:57 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=58496,localport=36459]
+2024-05-22 20:22:44 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=56394,localport=41089]
+2024-05-22 20:24:01 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=60738,localport=38113]
+2024-05-22 20:24:02 [STREAM] Stream finished. Tx Bytes: 934520
+2024-05-22 20:25:40 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=56122,localport=43363]
+2024-05-22 20:25:41 [STREAM] Stream finished. Tx Bytes: 1048064
+2024-05-22 20:30:35 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=37338,localport=36855]
+2024-05-22 20:30:36 [STREAM] Stream finished. Tx Bytes: 934520
+2024-05-22 20:31:07 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=56588,localport=41813]
+2024-05-22 20:31:09 [STREAM] Stream finished. Tx Bytes: 1048064

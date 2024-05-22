@@ -53,9 +53,9 @@ public class ClientAdd2L {
 
             s.add2L("Playlist1",o1);
             s.add2L("Playlist1",o2);
-            s.add2L(o3);
-            s.add2L(o4);
-            s.add2L(o5);
+            s.add2L("Playlist1",o3);
+            s.add2L("Playlist1",o4);
+            s.add2L("Playlist1",o5);
 
 
 
