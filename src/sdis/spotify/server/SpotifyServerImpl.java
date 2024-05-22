@@ -256,8 +256,13 @@ public class SpotifyServerImpl extends java.rmi.server.UnicastRemoteObject imple
      */
     public String setCover(Media objeto) throws RemoteException {
         if (this.directorio.containsKey(objeto.getName())){
+
+            Media o1 = this.directorio.get(objeto.getName());
+
+            o1.setCover(objeto.getCover());
+
             this.directorio.remove(objeto.getName());
-            this.directorio.put(objeto.getName(), objeto);
+            this.directorio.put(o1.getName(), o1);
             return "COVER ADDED";
         } else return "COVER NOT ADDED";
     }

@@ -3,7 +3,7 @@ package sdis.spotify.client.unit;
 import sdis.spotify.common.Spotify;
 import sdis.spotify.media.Media;
 
-public class ClientReadL {
+public class ClientContinousReadL {
     public static void main(String [] arg) {
 
         try{
@@ -11,14 +11,17 @@ public class ClientReadL {
             String r = s.hello();
             System.out.println(r);
 
-            Media o1=s.readL();
-            Media o2=s.readL();
-            Media o3=s.readL();
+            int vacio=0;
+            while(vacio==0){
+                try{
+                    Media o1 = s.readL("Playlist1");
+                    System.out.println(o1.getName());
 
-            System.out.println(o1.toString());
-            System.out.println(o2.toString());
-            System.out.println(o3.toString());
+                }catch (Exception e){
+                    vacio =1;
+                }
 
+            }
 
         }catch(Exception e){
             e.printStackTrace();

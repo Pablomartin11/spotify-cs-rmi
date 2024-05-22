@@ -1,2 +1,4 @@
 2024-05-21 17:38:15 [STREAM] Streaming to: Socket[addr=/172.20.10.12,port=52626,localport=42879]
 2024-05-21 17:38:17 [STREAM] Stream finished. Tx Bytes: 98256
+2024-05-22 17:46:59 [STREAM] Streaming to: Socket[addr=/127.0.0.1,port=42980,localport=34811]
+2024-05-22 17:47:01 [STREAM] Stream finished. Tx Bytes: 1113568
