@@ -91,7 +91,7 @@ public class Client {
             // Iniciar cancion
             SpotifyClient cliente = new ClientImpl();
             System.out.println(server.setClientStreamReceptor(cliente));
-            System.out.println(server.randomPlay());
+            System.out.println(server.startMedia(o1));
 
 
         }catch(Exception e){

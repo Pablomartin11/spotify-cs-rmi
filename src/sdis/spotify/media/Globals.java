@@ -25,11 +25,11 @@ public class Globals {
     public static String path_origin = "./mp3files/origin/";
     public static String path_destination = "./mp3files/destination/";
     // Streaming media player config
-    public static int player_delay_ms = 1500;
+    public static int player_delay_ms = 3000;
     public static String file_extension = ".mp3";
-    //public static String player_command = "firefox";
+    public static String player_command = "firefox";
     //public static String player_command = "vlc";
-    public static String player_command = "google-chrome";
+    //public static String player_command = "google-chrome";
     public static String player_abs_filepath = "./mp3files/destination/";
     // WIN CONFIGS
 //public static String player_command = "wmplayer";
