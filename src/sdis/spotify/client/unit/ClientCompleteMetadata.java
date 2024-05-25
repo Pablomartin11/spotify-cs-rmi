@@ -57,7 +57,8 @@ public class ClientCompleteMetadata {
                     int randomIndex = rand.nextInt(20);
                     String randomComment = comments.get(randomIndex);
                     o1.addComment(randomComment);
-                    //o1.addScore(rn+rand.nextInt(-2,2));
+                    //numero aleatorio entre -2 y 2
+                    o1.addScore(rn+(rand.nextInt(5)-2));
                 }
                 s.add2L(o1);
             }

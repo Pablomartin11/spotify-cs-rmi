@@ -36,6 +36,7 @@ public class ClientStream implements Runnable{
         BufferedOutputStream bos = null;
         try {
             System.out.println(">> Stream connecting to "+serverStreaming+":"+serverStreamingPort);
+
             SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
             sock = (SSLSocket) factoria.createSocket(serverStreaming,serverStreamingPort);
 
