@@ -29,8 +29,10 @@ public class ServerStream implements Runnable{
     }
     public void run(){
         try {
-            SSLServerSocketFactory factoriaServer = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-            SSLServerSocket socketServidor = (SSLServerSocket) factoriaServer.createServerSocket(Globals.server_port);
+            SSLServerSocketFactory factoriaServer =
+                    (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+            SSLServerSocket socketServidor =
+                    (SSLServerSocket) factoriaServer.createServerSocket(Globals.server_port);
             this.serverSocketPort = socketServidor.getLocalPort();
             System.out.println("--Stream Waiting...");
             SSLSocket sock = (SSLSocket) socketServidor.accept();
