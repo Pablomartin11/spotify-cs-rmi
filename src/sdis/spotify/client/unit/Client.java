@@ -36,8 +36,8 @@ public class Client {
             }
             
             // Añadir Canciones y Playlist
-            Media o1 = new Media("Esclava_Remix");
-            Media o2 = new Media("ElNano");
+            Media o1 = new Media("Suavemente");
+            Media o2 = new Media("Prendio");
             //Media o3 = new Media("Cancion 3");
             s.add2L(o1);
             s.add2L(o2);
@@ -73,19 +73,16 @@ public class Client {
             //r = s.getDirectoryList();
             //System.out.println(r);
 
-            // Cambiar caratula
-            //TODO
-
             // Añadir puntuacion
-            r = s.addScore("Esclava_Remix",9.8);
+            r = s.addScore("Prendio",9.8);
             System.out.println(r);
-            r = s.addScore("ElNano",10.01);
+            r = s.addScore("Suavemente",10.01);
             System.out.println(r);
 
             // Añadir comentario
-            r = s.addComment("Esclava_Remix","buena cancion");
+            r = s.addComment("Prendio","buena cancion");
             System.out.println(r);
-            r = s.addComment("Esclava_Remix","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            r = s.addComment("Prendio","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             System.out.println(r);
 
             // Iniciar cancion

@@ -12,8 +12,12 @@ public class ClientPlayList {
     public static void main(String [] arg) {
         Scanner scanner = new Scanner(System.in);
         try{
-            Spotify s = (Spotify) java.rmi.Naming.lookup("spotify");
-            SpotifyServer server = (SpotifyServer) s;
+            javax.rmi.ssl.SslRMIClientSocketFactory rmicsf = new javax.rmi.ssl.SslRMIClientSocketFactory();
+            java.rmi.registry.Registry reg = java.rmi.registry.LocateRegistry.getRegistry("localhost", 1099, rmicsf);
+            Object remoto = reg.lookup("spotify");
+            Spotify s = (Spotify) remoto;
+            SpotifyServer server = (SpotifyServer) remoto;
+
             String r = s.hello();
             System.out.println(r);
 
@@ -22,6 +26,8 @@ public class ClientPlayList {
                 try{
                     Media o1 = s.readL("Playlist1");
                     System.out.println("Siguiente canción: "+o1.getName());
+                    System.out.println("Pulse 1 para escuchar la cancion \nPulse 2 para saltar \nPulse 3 para salir");
+
                     String opcion = scanner.next();
 
                     switch (opcion) {
